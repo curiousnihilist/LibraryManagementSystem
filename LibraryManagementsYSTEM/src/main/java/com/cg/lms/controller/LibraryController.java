@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.lms.dto.Account;
 import com.cg.lms.dto.Book;
+import com.cg.lms.exception.BookNotFoundException;
 import com.cg.lms.repo.AccountRepository;
 import com.cg.lms.repo.AuthorRepository;
 import com.cg.lms.repo.BookRepository;
 import com.cg.lms.repo.IssuedItemRepository;
 import com.cg.lms.repo.PersonRepository;
+import com.cg.lms.service.BookService;
 
 @RestController
 @RequestMapping(value = "/library")
@@ -39,6 +41,9 @@ public class LibraryController {
 		this.personRepo = personRepo;
 	}
 
+	@Autowired
+	private BookService bookSevice;
+	
 	@GetMapping(value = "/bytitle/{title}")
 	public List<Book> getByTitles(@PathVariable("title") String title){
 		return bookRepo.findByTitleIgnoreCase(title);
@@ -60,8 +65,8 @@ public class LibraryController {
 	 }
 	 
 	 @GetMapping(value = "getallbooks", produces = "application/json" )
-	 public List<Book> getAllBooks(){
-		 return bookRepo.findAll();
+	 public List<Book> getAllBooks() throws BookNotFoundException{
+		 return bookSevice.fetchAllBooks();
 	 }
 	
 }
