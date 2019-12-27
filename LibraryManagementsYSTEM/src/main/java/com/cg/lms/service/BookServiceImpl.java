@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> fetchByTitle(String title) throws BookNotFoundException {
-		return bookRepo.findByTitleContaining(title);
+		return bookRepo.findByTitleContainingIgnoreCase(title);
 	}
 
 	@Override
