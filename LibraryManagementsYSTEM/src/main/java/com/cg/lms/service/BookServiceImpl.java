@@ -24,8 +24,7 @@ public class BookServiceImpl implements BookService {
 		List<Book> books = bookRepo.findAll();
 		if (books.isEmpty())
 			throw new BookNotFoundException("Sorry! No Books in the Library.");
-		else
-			return bookRepo.findAll();
+		return bookRepo.findAll();
 	}
 
 	@Override
@@ -35,7 +34,10 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> fetchByTitle(String title) throws BookNotFoundException {
-		return bookRepo.findByTitleContainingIgnoreCase(title);
+		List<Book> books = bookRepo.findByTitleContainingIgnoreCase(title);
+		if(books.isEmpty())
+			throw new BookNotFoundException("No books found with title: "+title);
+		return books;
 	}
 
 	@Override
@@ -57,9 +59,11 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> fetchByAuthor(String Author) throws BookNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Book> fetchByAuthor(String name) throws BookNotFoundException {
+		List<Book> books = bookRepo.findByAuthor(name);
+		if(books.isEmpty())
+			throw new BookNotFoundException("No Books found with author: "+name);
+		return books;
 	}
 	
 

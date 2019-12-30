@@ -42,11 +42,11 @@ public class LibraryController {
 	}
 
 	@Autowired
-	private BookService bookSevice;
+	private BookService bookService;
 	
 	@GetMapping(value = "/bytitle/{title}")
-	public List<Book> getByTitles(@PathVariable("title") String title){
-		return bookRepo.findByTitleIgnoreCase(title);
+	public List<Book> getByTitles(@PathVariable("title") String title) throws BookNotFoundException{
+		return bookService.fetchByTitle(title);
 	}
 	
 	@PostMapping(value = "/savebook")
@@ -66,7 +66,11 @@ public class LibraryController {
 	 
 	 @GetMapping(value = "getallbooks", produces = "application/json" )
 	 public List<Book> getAllBooks() throws BookNotFoundException{
-		 return bookSevice.fetchAllBooks();
+		 return bookService.fetchAllBooks();
 	 }
 	
+	 @GetMapping(value = "getbyauthor/{name}", produces = "application/json")
+	 public List<Book> getBookByAuthor(@PathVariable("name") String name) throws BookNotFoundException{
+		 return bookService.fetchByAuthor(name);
+	 }
 }
