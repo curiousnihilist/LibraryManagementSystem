@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.lms.dto.Book;
+import com.cg.lms.exception.BookAlreadyExistException;
 import com.cg.lms.exception.BookNotFoundException;
 import com.cg.lms.repo.BookRepository;
 
@@ -20,6 +21,13 @@ public class BookServiceImpl implements BookService {
 	private BookRepository bookRepo;
 
 	@Override
+	public Book persistBook(Book book) throws BookAlreadyExistException{
+		if(bookRepo.findAll().contains(book))
+			throw new BookAlreadyExistException("Book Already Exist in the library");
+		return bookRepo.save(book);
+	}
+	
+	@Override
 	public List<Book> fetchAllBooks() throws BookNotFoundException {
 		List<Book> books = bookRepo.findAll();
 		if (books.isEmpty())
@@ -29,7 +37,10 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Optional<Book> fetchBookById(int bookId) throws BookNotFoundException {
-		return bookRepo.findById(bookId);
+		Optional<Book> book = bookRepo.findById(bookId);
+		if( book == null)
+			throw new BookNotFoundException("No Book found by the Book Id: "+bookId);
+		return book;
 	}
 
 	@Override
@@ -64,6 +75,21 @@ public class BookServiceImpl implements BookService {
 		if(books.isEmpty())
 			throw new BookNotFoundException("No Books found with author: "+name);
 		return books;
+	}
+
+	@Override
+	public Book updateBookCopies(int copies, String isbn) throws BookNotFoundException {
+		if(bookRepo.findByIsbn(isbn).isEmpty())
+			throw new BookNotFoundException("No Book found with ISBN: "+isbn);
+		else 
+			return bookRepo.updateBookCopies(copies, isbn);
+		
+	}
+
+	@Override
+	public Book deleteBookById(int bookId) throws BookNotFoundException {
+		//if(bookRepo.findB(bookId) == null)
+		return null;
 	}
 	
 

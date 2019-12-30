@@ -4,9 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cg.lms.dto.Book;
+import com.cg.lms.exception.BookAlreadyExistException;
 import com.cg.lms.exception.BookNotFoundException;
 
 public interface BookService {
+	
+	Book persistBook(Book book) throws BookAlreadyExistException;
+	
+	Book updateBookCopies(int copies, String isbn) throws BookNotFoundException;
+	
+	Book deleteBookById(int bookId) throws BookNotFoundException;
 	
 	List<Book> fetchAllBooks() throws BookNotFoundException;
 	Optional<Book> fetchBookById(int bookId) throws BookNotFoundException;
@@ -15,6 +22,7 @@ public interface BookService {
 	List<Book> fetchByPublisher(String publisher) throws BookNotFoundException;
 	List<Book> fetchByCategory(String category) throws BookNotFoundException;
 	List<Book> fetchByAuthor(String Author) throws BookNotFoundException;
+	
 	
 
 }

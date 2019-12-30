@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.lms.dto.Account;
+import com.cg.lms.dto.Author;
 import com.cg.lms.dto.Book;
+import com.cg.lms.exception.BookAlreadyExistException;
 import com.cg.lms.exception.BookNotFoundException;
 import com.cg.lms.repo.AccountRepository;
 import com.cg.lms.repo.AuthorRepository;
@@ -49,21 +51,17 @@ public class LibraryController {
 		return bookService.fetchByTitle(title);
 	}
 	
-	@PostMapping(value = "/savebook")
-	public Book saveBook(@RequestBody Book book) {
-		return bookRepo.save(book);
+	@PostMapping(value = "/savebook", consumes = "application/json")
+	public Book saveBook(@RequestBody Book book) throws BookAlreadyExistException {
+		return bookService.persistBook(book);
 	}
 	
 	@PostMapping(value = "/saveaccount")
-	public Account saveBook(@RequestBody Account account) {
+	public Account saveAccount(@RequestBody Account account) {
 		return accountRepo.save(account);
-	}
+	}	
 	
-	 @GetMapping(value = "/{id}")
-	 public Optional<Book> getBookById(@PathVariable("id") int id) {
-		 return bookRepo.findById(id);
-	 }
-	 
+	 	 
 	 @GetMapping(value = "getallbooks", produces = "application/json" )
 	 public List<Book> getAllBooks() throws BookNotFoundException{
 		 return bookService.fetchAllBooks();
@@ -72,5 +70,15 @@ public class LibraryController {
 	 @GetMapping(value = "getbyauthor/{name}", produces = "application/json")
 	 public List<Book> getBookByAuthor(@PathVariable("name") String name) throws BookNotFoundException{
 		 return bookService.fetchByAuthor(name);
+	 }
+	 
+	 @GetMapping(value = "getauthorbybook/{title}", produces = "application/json")
+	 public List<Author> getAuthorByBook(@PathVariable("title") String title){
+		 return authorRepo.findAuthorByBook(title);
+	 }
+	 
+	 @GetMapping(value = "update-book-copies/{isbn}/{copies}")
+	 public Book updateBookCopies(@PathVariable("isbn") String isbn, @PathVariable("copies") int copies) throws BookNotFoundException {
+		 return bookService.updateBookCopies(copies, isbn);
 	 }
 }
