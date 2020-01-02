@@ -26,8 +26,8 @@ public class IssuedItem {
 	@Column(name = "issue_id")
 	private int issueId;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "book_id", unique = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "book_id")
 	private Book book;
 	
 	@Column(name = "issue_date")
@@ -45,8 +45,8 @@ public class IssuedItem {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_id", unique = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "account_id")
 	private Account account;
 
 	public IssuedItem(int issueId, Book book, LocalDate issueDate, LocalDate dueDate, LocalDate returnDate, double fine,

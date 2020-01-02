@@ -28,7 +28,7 @@ public class Person {
 	private int phone;
 	
 	@Column(name = "subscription_date")
-	private LocalDate SubscriptionDate;
+	private LocalDate subscriptionDate;
 
 	public Person(int personId, String name, LocalDate dob, int phone, LocalDate subscriptionDate) {
 		super();
@@ -36,7 +36,7 @@ public class Person {
 		this.name = name;
 		this.dob = dob;
 		this.phone = phone;
-		SubscriptionDate = subscriptionDate;
+		this.subscriptionDate = subscriptionDate;
 	}
 
 	public int getPersonId() {
@@ -72,11 +72,11 @@ public class Person {
 	}
 
 	public LocalDate getSubscriptionDate() {
-		return SubscriptionDate;
+		return subscriptionDate;
 	}
 
 	public void setSubscriptionDate(LocalDate subscriptionDate) {
-		SubscriptionDate = subscriptionDate;
+		this.subscriptionDate = subscriptionDate;
 	}
 	
 	

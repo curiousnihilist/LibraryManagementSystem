@@ -78,12 +78,16 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public Book updateBookCopies(int copies, String isbn) throws BookNotFoundException {
-		if(bookRepo.findByIsbn(isbn).isEmpty())
-			throw new BookNotFoundException("No Book found with ISBN: "+isbn);
-		else 
-			return bookRepo.updateBookCopies(copies, isbn);
-		
+	public boolean updateBookCopies(int copies, int bookId) throws BookNotFoundException {
+		Optional<Book> book =  bookRepo.findById(bookId);
+		if(book == null)
+			throw new BookNotFoundException("No Book found with Book ID: "+bookId);
+		else {
+			if(bookRepo.updateBookCopies(copies, bookId)>0)
+				return true;
+			else
+				throw new BookNotFoundException("Sorry Something went Wrong!");
+		}
 	}
 
 	@Override

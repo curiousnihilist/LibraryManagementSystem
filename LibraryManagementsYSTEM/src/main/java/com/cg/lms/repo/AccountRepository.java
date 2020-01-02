@@ -29,4 +29,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer>{
 	@Query("UPDATE Account a SET a.password = :password WHERE a.email = :email")
 	Account forgotPassword(@Param("email") String email,@Param("password") String password);
 	
+	
+	
 }

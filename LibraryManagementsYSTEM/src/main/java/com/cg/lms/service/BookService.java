@@ -10,11 +10,8 @@ import com.cg.lms.exception.BookNotFoundException;
 public interface BookService {
 	
 	Book persistBook(Book book) throws BookAlreadyExistException;
-	
-	Book updateBookCopies(int copies, String isbn) throws BookNotFoundException;
-	
+	boolean updateBookCopies(int copies, int bookId) throws BookNotFoundException;
 	Book deleteBookById(int bookId) throws BookNotFoundException;
-	
 	List<Book> fetchAllBooks() throws BookNotFoundException;
 	Optional<Book> fetchBookById(int bookId) throws BookNotFoundException;
 	List<Book> fetchByTitle(String title) throws BookNotFoundException;
