@@ -79,7 +79,9 @@ public class Person {
 		this.subscriptionDate = subscriptionDate;
 	}
 	
-	
+	public Person() {
+		
+	}
 	
 	
 

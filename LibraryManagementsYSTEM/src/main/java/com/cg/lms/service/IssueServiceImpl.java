@@ -2,6 +2,7 @@ package com.cg.lms.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,8 +66,12 @@ public class IssueServiceImpl implements IssueService{
 
 	@Override
 	public IssuedItem persistReturnedItem(IssuedItem item) throws IssuedItemNotFoundException, BookNotFoundException {
+		if(item.getStatus() == Status.RETURNED)
+			throw new IssuedItemNotFoundException("Item is already returned!");
+		
 		if(itemRepo.existsById(item.getIssueId())) {
 			bookService.updateBookCopies(item.getBook().getNoOfCopies()+1, item.getBook().getBookId());
+			item.setReturnDate(LocalDate.now());
 			item.setStatus(Status.RETURNED);
 			return itemRepo.save(item);
 		}
@@ -80,8 +85,8 @@ public class IssueServiceImpl implements IssueService{
 		Optional<IssuedItem> optionalItem = itemRepo.findById(issueId);
 		if(optionalItem.isPresent()) {
 			IssuedItem item = optionalItem.get();
-			if(item.getStatus() == Status.ISSUED)
-				item.setFine(Period.between(LocalDate.now(), item.getDueDate()).getDays());
+			if(item.getStatus() == Status.ISSUED && item.getDueDate().isBefore(LocalDate.now()))
+				item.setFine(ChronoUnit.DAYS.between( item.getDueDate(),LocalDate.now()));
 			return item;
 		}
 		else

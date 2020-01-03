@@ -45,7 +45,7 @@ public class IssuedItem {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "account_id")
 	private Account account;
 
@@ -126,6 +126,8 @@ public class IssuedItem {
 		this.account = account;
 	}
 	
-
+	public IssuedItem(){
+		
+	}
 	
 }

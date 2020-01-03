@@ -133,4 +133,14 @@ public class LibraryController {
 	 public IssuedItem returnBook(@RequestBody IssuedItem item) throws IssuedItemNotFoundException, BookNotFoundException {
 		 return issueService.persistReturnedItem(item);
 	 }
+	 
+	 @GetMapping(value = "find-by-issueid/{issueid}")
+	 public IssuedItem findIssuedItemByIssueId(@PathVariable("issueid") int issueid) throws IssuedItemNotFoundException {
+		 return issueService.findByIssueId(issueid);
+	 }
+	 
+	 @GetMapping(value = "issued-books-by-account-id/{accountid}")
+	 public List<IssuedItem> fetchIssuedBooksByAccountId(@PathVariable("accountid") int accountid){
+		 return issueService.findByAccountID(accountid);
+	 }
 }
