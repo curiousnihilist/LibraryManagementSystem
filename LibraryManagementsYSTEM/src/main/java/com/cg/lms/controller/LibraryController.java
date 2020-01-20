@@ -87,7 +87,7 @@ public class LibraryController {
 	  * @return
 	  * @throws BookNotFoundException
 	  */
-	 @GetMapping(value = "getallbooks", produces = "application/json" )
+	 @GetMapping(value = "/getallbooks", produces = "application/json" )
 	 public List<Book> getAllBooks() throws BookNotFoundException{
 		 return bookService.fetchAllBooks();
 	 }
@@ -99,19 +99,19 @@ public class LibraryController {
 	  * @return
 	  * @throws BookNotFoundException
 	  */
-	 @GetMapping(value = "getbyauthor/{name}", produces = "application/json")
+	 @GetMapping(value = "/getbyauthor/{name}", produces = "application/json")
 	 public List<Book> getBookByAuthor(@PathVariable("name") String name) throws BookNotFoundException{
 		 return bookService.fetchByAuthor(name);
 	 }
 	 
-	 /**
-	  * Fetch all authors by book name
-	  * @param title
-	  * @return
-	  */
-	 @GetMapping(value = "getauthorbybook/{title}", produces = "application/json")
-	 public List<Author> getAuthorByBook(@PathVariable("title") String title){
-		 return authorRepo.findAuthorByBook(title);
+	 @GetMapping(value = "/getbyisbn/{isbn}", produces = "application/json")
+	 public List<Book> getBookByIsbn(@PathVariable("isbn") String isbn) throws BookNotFoundException{
+		 return bookService.fetchByIsbn(isbn);
+	 }
+	 
+	 @GetMapping(value = "/getbycategory/{category}", produces = "application/json")
+	 public List<Book> getBookByCategory(@PathVariable("category") String category) throws BookNotFoundException{
+		 return bookService.fetchByCategory(category);
 	 }
 	 
 	 /**
@@ -121,28 +121,34 @@ public class LibraryController {
 	  * @return
 	  * @throws BookNotFoundException
 	  */
-	 @GetMapping(value = "update-book-copies/{bookid}/{copies}")
+	 @GetMapping(value = "/update-book-copies/{bookid}/{copies}")
 	 public boolean updateBookCopies(@PathVariable("bookId") int bookId, @PathVariable("copies") int copies) throws BookNotFoundException {
 		 return bookService.updateBookCopies(copies, bookId);
 	 }
 	 
-	 @PostMapping(value = "issue-book")
+	 @PostMapping(value = "/issue-book")
 	 public IssuedItem issueBook(@RequestBody IssuedItem item) throws NotEligibleForIssueException, IssuedItemNotFoundException, BookNotFoundException {
 		 return issueService.persistIssuedItem(item);
 	 }
 	 
-	 @PostMapping(value = "return-book")
+	 @PostMapping(value = "/return-book")
 	 public IssuedItem returnBook(@RequestBody IssuedItem item) throws IssuedItemNotFoundException, BookNotFoundException {
 		 return issueService.persistReturnedItem(item);
 	 }
 	 
-	 @GetMapping(value = "find-by-issueid/{issueid}")
+	 @GetMapping(value = "/find-by-issueid/{issueid}")
 	 public IssuedItem findIssuedItemByIssueId(@PathVariable("issueid") int issueid) throws IssuedItemNotFoundException {
 		 return issueService.findByIssueId(issueid);
 	 }
 	 
-	 @GetMapping(value = "issued-books-by-account-id/{accountid}")
-	 public List<IssuedItem> fetchIssuedBooksByAccountId(@PathVariable("accountid") int accountid){
-		 return issueService.findByAccountID(accountid);
+	 @GetMapping(value = "/issued-books/{accountid}")
+	 public List<IssuedItem> fetchIssuedBooksByAccountId(@PathVariable("accountid") int accountId) throws IssuedItemNotFoundException{
+		 return issueService.findBooksToReturnByAccountId(accountId);
 	 }
+	 
+	 @GetMapping(value = "/returned-books/{accountid}")
+	 public List<IssuedItem> fetchReturnedBookByAccountId(@PathVariable("accountid") int accountId) throws IssuedItemNotFoundException{
+		 return issueService.findReturnedBooksByAccountId(accountId);
+	 }
+	 
 }

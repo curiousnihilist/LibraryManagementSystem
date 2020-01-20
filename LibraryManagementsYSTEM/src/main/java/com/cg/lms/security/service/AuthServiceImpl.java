@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,8 @@ public class AuthServiceImpl implements AuthService{
 	public String authenticateAccount(Login credentials) throws InvalidCredentialsException {
 		try {
 			// Takes care of encoding the password
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmailId(), credentials.getPassword()));
+			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmailId(), credentials.getPassword()));
+			System.out.println(authenticate.isAuthenticated());
 			return jwTokenProvider.createToken(credentials.getEmailId(), repository.findByEmail(credentials.getEmailId()).getRole());
 		} catch (AuthenticationException e) {
 			throw new InvalidCredentialsException("Invalid Login Credentials.");
@@ -70,7 +72,6 @@ public class AuthServiceImpl implements AuthService{
 			throw new SessionTimedOutException("Session Timed Out. Please Login Again");
 		String AccountEmailId = jwTokenProvider.getUsername(authorizationToken);
 		Account loggedInAccount = repository.findByEmail(AccountEmailId);
-		loggedInAccount.setPassword("CLASSIFIED");
 		return loggedInAccount;
 	}
 

@@ -15,6 +15,9 @@ import com.cg.lms.exception.BookNotFoundException;
 import com.cg.lms.exception.IssuedItemNotFoundException;
 import com.cg.lms.exception.NotEligibleForIssueException;
 import com.cg.lms.exception.RestExceptionResponse;
+import com.cg.lms.security.exception.InvalidCredentialsException;
+import com.cg.lms.security.exception.SessionTimedOutException;
+import com.cg.lms.security.exception.UserCollisionException;
 
 
 @ControllerAdvice
@@ -24,7 +27,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 					   BookAlreadyExistException.class,
 					   BookNotFoundException.class,
 					   IssuedItemNotFoundException.class,
-					   NotEligibleForIssueException.class})
+					   NotEligibleForIssueException.class,
+					   UserCollisionException.class,
+					   SessionTimedOutException.class,
+					   InvalidCredentialsException.class})
 	public ResponseEntity<RestExceptionResponse> exceptionHandler(Exception ex, WebRequest request){
 		
 		RestExceptionResponse error = new RestExceptionResponse();

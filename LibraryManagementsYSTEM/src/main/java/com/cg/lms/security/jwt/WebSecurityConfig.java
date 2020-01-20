@@ -30,7 +30,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		httpSecurity.authorizeRequests()//
 				.antMatchers("/auth-api/authenticate").permitAll() // Allowing anyone to access the login page
 				.antMatchers("/auth-api/sign-up").permitAll()// Allowing anyone to access the sign up page.
-				.antMatchers("/recipe-api/fetch-all").permitAll() // Allowing anyone to access the Fetch All Recipe end-point
+				.antMatchers("/auth-api/get-user").permitAll() // Allowing anyone to access the Fetch All Recipe end-point
+				.antMatchers("/library/bytitle/**").permitAll()
+				.antMatchers("/library/getbyisbn/**").permitAll()
+				.antMatchers("/library/getbycategory/**").permitAll()
+				.antMatchers("/library/getbyauthor/**").permitAll()
+				.antMatchers("/library/getallbooks").permitAll()
 				// Disallow everything else..
 				.anyRequest().authenticated();
 

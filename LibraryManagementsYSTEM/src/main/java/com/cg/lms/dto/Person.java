@@ -25,6 +25,7 @@ public class Person {
 	
 	private LocalDate dob;
 	
+	@Column(length = 12)
 	private String phone;
 	
 	@Column(length = 10)

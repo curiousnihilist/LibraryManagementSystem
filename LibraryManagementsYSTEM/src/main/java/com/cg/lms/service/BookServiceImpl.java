@@ -53,8 +53,10 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> fetchByIsbn(String isbn) throws BookNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Book> books = bookRepo.findByIsbn(isbn);
+		if(books.isEmpty())
+			throw new BookNotFoundException("No books found with ISBN: "+isbn);
+		return books;
 	}
 
 	@Override
@@ -65,8 +67,10 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> fetchByCategory(String category) throws BookNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Book> books = bookRepo.findByCategoryContainingIgnoreCase(category);
+		if(books.isEmpty())
+			throw new BookNotFoundException("No books found with Category: "+category);
+		return books;
 	}
 
 	@Override

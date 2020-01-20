@@ -92,18 +92,39 @@ public class IssueServiceImpl implements IssueService{
 		else
 			throw new IssuedItemNotFoundException("No Issued item found by the id: "+ issueId);
 	}
-
-	@Override
-	public List<IssuedItem> findByAccountID(int accountId) {
-		return itemRepo.fetchBooksByAccountId(accountId);
-	}
-
 	
 	@Override
-	public Double getFine(int accountId) {
+	public Double getFine(int accountId) throws IssuedItemNotFoundException {
+		List<IssuedItem> issuedItems = itemRepo.fetchIssuedBooks(accountId);
+		if(issuedItems.isEmpty())
+			throw new IssuedItemNotFoundException("No Books Issued Currently!");
 		return itemRepo.fetchIssuedBooks(accountId).stream().map(item -> item.getFine()).collect(Collectors.toList())
 					.stream().reduce((double) 0,(x,y) -> x+y);
 		
+	}
+
+	@Override
+	public List<IssuedItem> findBooksToReturnByAccountId(int accountId) throws IssuedItemNotFoundException {
+		List<IssuedItem> issuedItems = itemRepo.fetchIssuedBooks(accountId);
+		if(issuedItems.isEmpty())
+			throw new IssuedItemNotFoundException("No Books Issued Currently!");
+		return issuedItems;
+	}
+
+	@Override
+	public List<IssuedItem> findBooksByAccountId(int accountId) throws IssuedItemNotFoundException {
+		List<IssuedItem> issuedItems = itemRepo.fetchBooksByAccountId(accountId);
+		if(issuedItems.isEmpty())
+			throw new IssuedItemNotFoundException("No Books Issued!");
+		return issuedItems;
+	}
+
+	@Override
+	public List<IssuedItem> findReturnedBooksByAccountId(int accountId) throws IssuedItemNotFoundException {
+		List<IssuedItem> issuedItems = itemRepo.fetchReturnedBooksByAccountId(accountId);
+		if(issuedItems.isEmpty())
+			throw new IssuedItemNotFoundException("No Books Issued!");
+		return issuedItems;
 	}
 
 }
