@@ -72,6 +72,8 @@ public class IssueServiceImpl implements IssueService{
 		if(itemRepo.existsById(item.getIssueId())) {
 			bookService.updateBookCopies(item.getBook().getNoOfCopies()+1, item.getBook().getBookId());
 			item.setReturnDate(LocalDate.now());
+			if(item.getStatus() == Status.ISSUED && item.getDueDate().isBefore(LocalDate.now()))
+				item.setFine(ChronoUnit.DAYS.between( item.getDueDate(),LocalDate.now()));
 			item.setStatus(Status.RETURNED);
 			return itemRepo.save(item);
 		}
@@ -106,6 +108,10 @@ public class IssueServiceImpl implements IssueService{
 	@Override
 	public List<IssuedItem> findBooksToReturnByAccountId(int accountId) throws IssuedItemNotFoundException {
 		List<IssuedItem> issuedItems = itemRepo.fetchIssuedBooks(accountId);
+		for(IssuedItem item: issuedItems) {
+			if(item.getStatus() == Status.ISSUED && item.getDueDate().isBefore(LocalDate.now()))
+				item.setFine(ChronoUnit.DAYS.between( item.getDueDate(),LocalDate.now()));
+		}
 		if(issuedItems.isEmpty())
 			throw new IssuedItemNotFoundException("No Books Issued Currently!");
 		return issuedItems;

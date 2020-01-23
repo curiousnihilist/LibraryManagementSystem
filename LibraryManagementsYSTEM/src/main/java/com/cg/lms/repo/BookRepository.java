@@ -19,7 +19,7 @@ public interface BookRepository extends JpaRepository<Book, Integer>{
 	List<Book> findByIsbn(String isbn);
 	List<Book> findByTitleContainingIgnoreCase(String title);
 	
-	@Query("SELECT b FROM Book b JOIN FETCH b.authors a where a.name LIKE '%?1%'")
+	@Query("SELECT b FROM Book b JOIN FETCH b.authors a where a.name LIKE ?1")
 	List<Book> findByAuthor(String name);
 	
 	@Modifying

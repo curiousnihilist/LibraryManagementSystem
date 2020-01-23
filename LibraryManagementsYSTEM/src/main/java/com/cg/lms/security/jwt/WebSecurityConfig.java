@@ -1,8 +1,12 @@
 package com.cg.lms.security.jwt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+
 
 
 @Configuration
@@ -36,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/library/getbycategory/**").permitAll()
 				.antMatchers("/library/getbyauthor/**").permitAll()
 				.antMatchers("/library/getallbooks").permitAll()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 				// Disallow everything else..
 				.anyRequest().authenticated();
 
@@ -44,6 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 		// Apply JWT
 		httpSecurity.apply(new JWTokenFilterConfigurer(jwTokenProvider));
+		
+		// CORS configuration
+		//httpSecurity.cors();
 	}
 
 	@Bean
@@ -56,6 +69,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
 	}
+	
+	
+    
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        Arrays.asList(new String[] {"http://localhost:8880"});
+        configuration.setAllowedOrigins(Arrays.asList(new String[] {"*"}));
+        configuration.setAllowedMethods(Arrays.asList(new String[] {"*"}));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 	
 	
 

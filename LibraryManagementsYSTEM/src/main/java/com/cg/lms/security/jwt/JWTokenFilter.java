@@ -38,8 +38,6 @@ public class JWTokenFilter extends OncePerRequestFilter {
 	      SecurityContextHolder.clearContext();
 	     //throw new SessionTimedOutException(ex.getMessage());
 	    }
-	    System.out.println(httpServletRequest);
-	    System.out.println(httpServletResponse);
 	    filterChain.doFilter(httpServletRequest, httpServletResponse);
 	    
 	}

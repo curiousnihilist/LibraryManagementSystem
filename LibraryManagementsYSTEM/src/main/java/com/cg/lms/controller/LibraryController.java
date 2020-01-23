@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ import com.cg.lms.service.IssueService;
 
 @RestController
 @RequestMapping(value = "/library")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class LibraryController {
 
 	private BookService bookService;
@@ -141,6 +142,7 @@ public class LibraryController {
 		 return issueService.findByIssueId(issueid);
 	 }
 	 
+	 
 	 @GetMapping(value = "/issued-books/{accountid}")
 	 public List<IssuedItem> fetchIssuedBooksByAccountId(@PathVariable("accountid") int accountId) throws IssuedItemNotFoundException{
 		 return issueService.findBooksToReturnByAccountId(accountId);
@@ -150,5 +152,5 @@ public class LibraryController {
 	 public List<IssuedItem> fetchReturnedBookByAccountId(@PathVariable("accountid") int accountId) throws IssuedItemNotFoundException{
 		 return issueService.findReturnedBooksByAccountId(accountId);
 	 }
-	 
+
 }

@@ -75,6 +75,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> fetchByAuthor(String name) throws BookNotFoundException {
+		name = "%" + name + "%";
 		List<Book> books = bookRepo.findByAuthor(name);
 		if(books.isEmpty())
 			throw new BookNotFoundException("No Books found with author: "+name);
